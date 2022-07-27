@@ -2,8 +2,10 @@ const mongoose = require('mongoose');
 const express = require("express");
 const app = express();
 
-const DB = 'mongodb+srv://vikramsinghdewda:IoorXae7nnK8rw8E@cluster0.vsvwdvg.mongodb.net/mernstack?retryWrites=true&w=majority'
-mongoose.connect(DB).then(()=>{console.log(`Database Connected`)}).catch((error)=>{console.log(error)});
+const dotenv = require('dotenv');
+dotenv.config({path:"./config.env"});
+
+require('./Database/Connection');
 
 // Middleware
 const middleware = (req,res,next) => {
