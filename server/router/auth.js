@@ -1,4 +1,5 @@
 const express = require('express');
+const bcrypt = require('bcrypt');
 const router = express.Router();
 const User = require('../models/userSchema');
 router.get('/', (req, res) => {
@@ -26,12 +27,13 @@ router.post('/register', async (req, res) => {
 router.post('/signin', async (req, res) => {
     try {
         const { email, password } = req.body;
-        if (email.length == 0 || password.length == 0) {
+        if (!email || !password) {
             return res.status(400).json({ success: false, message: "please enter your email or password" })
         }
         const userExist = await User.findOne({ email: email });
         if (userExist) {
-            if (userExist.password == password) {
+            const isSame = await bcrypt.compare(password, userExist.password);
+            if (isSame) {
                 return res.status(200).json({ success: true, message: userExist });
             }
             else {
