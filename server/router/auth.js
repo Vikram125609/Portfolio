@@ -39,6 +39,10 @@ router.post('/signin', async (req, res) => {
             if (isSame) {
                 token = await userExist.generateAuthToken();
                 console.log(token);
+                res.cookie("jwtoken", token, {
+                    expires: new Date(Date.now() + 25892000000),
+                    httpOnly: true
+                });
                 return res.status(200).json({ success: true, message: userExist });
             }
             else {
