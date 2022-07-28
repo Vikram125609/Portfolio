@@ -6,9 +6,9 @@ router.get('/', (req, res) => {
 })
 router.post('/register', async (req, res) => {
     const { name, email, phone, work, password, cpassword } = req.body;
-    const checkExist = await User.findOne({ email: email });
+    const userExist = await User.findOne({ email: email });
     try {
-        if (checkExist) {
+        if (userExist) {
             return res.status(422).json({ success: false, message: "User Already Exist" });
         }
         const user = await User.create(req.body);
@@ -17,5 +17,27 @@ router.post('/register', async (req, res) => {
         return res.status(500).json({ success: false, message: error });
     }
 });
-
+router.post('/signin', async (req, res) => {
+    try {
+        const { email, password } = req.body;
+        if (email.length == 0 || password.length == 0) {
+            return res.status(400).json({ success: false, message: "please enter your email or password" })
+        }
+        const userExist = await User.findOne({ email: email });
+        if (userExist) {
+            if (userExist.password == password) {
+                return res.status(200).json({ success: true, message: userExist });
+            }
+            else {
+                return res.status(404).json({ success: false, message: "Invalid Credentials" });
+            }
+        }
+        else {
+            return res.status(404).json({ success: false, message: "Invalid Credentials" });
+        }
+    }
+    catch(error) {
+        return res.status(500).json({success:false,message:error});
+    }
+});
 module.exports = router;
