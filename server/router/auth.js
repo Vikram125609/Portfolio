@@ -1,5 +1,6 @@
 const express = require('express');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 const router = express.Router();
 const User = require('../models/userSchema');
 router.get('/', (req, res) => {
@@ -26,14 +27,18 @@ router.post('/register', async (req, res) => {
 });
 router.post('/signin', async (req, res) => {
     try {
+        let token;
         const { email, password } = req.body;
         if (!email || !password) {
             return res.status(400).json({ success: false, message: "please enter your email or password" })
         }
         const userExist = await User.findOne({ email: email });
+        console.log(userExist);
         if (userExist) {
             const isSame = await bcrypt.compare(password, userExist.password);
             if (isSame) {
+                token = await userExist.generateAuthToken();
+                console.log(token);
                 return res.status(200).json({ success: true, message: userExist });
             }
             else {
