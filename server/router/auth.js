@@ -11,8 +11,14 @@ router.post('/register', async (req, res) => {
         if (userExist) {
             return res.status(422).json({ success: false, message: "User Already Exist" });
         }
-        const user = await User.create(req.body);
-        return res.status(201).json({ success: true, message: user });
+        else if (password != cpassword) {
+            return res.status(400).json({ success: false, message: "Password are not matching" });
+        }
+        else {
+            const user = new User({ name, email, phone, work, password, cpassword });
+            await user.save()
+            return res.status(201).json({ success: true, message: user });
+        }
     } catch (error) {
         return res.status(500).json({ success: false, message: error });
     }
@@ -36,8 +42,8 @@ router.post('/signin', async (req, res) => {
             return res.status(404).json({ success: false, message: "Invalid Credentials" });
         }
     }
-    catch(error) {
-        return res.status(500).json({success:false,message:error});
+    catch (error) {
+        return res.status(500).json({ success: false, message: error });
     }
 });
 module.exports = router;
