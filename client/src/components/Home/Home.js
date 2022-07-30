@@ -1,7 +1,9 @@
+import './Home.css';
 const Home = () => {
     return (
         <>
-            <h1>WE ARE MERN DEVELOPERS</h1>
+            <div className='outsideContainer'>
+            </div>
         </>
     );
 };

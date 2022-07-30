@@ -1,9 +1,9 @@
-import About from "./components/About";
-import Contact from "./components/Contact";
-import Login from "./components/Login";
-import Signup from "./components/Signup";
-import Home from "./components/Home";
-import Navbar from "./components/Navbar";
+import About from "./components/About/About";
+import Contact from "./components/Contact/Contact";
+import Login from "./components/Login/Login";
+import Signup from "./components/Signup/Signup";
+import Home from "./components/Home/Home";
+import Navbar from "./components/Navbar/Navbar";
 import { Routes, Route } from "react-router-dom";
 const App = () => {
   return (
