@@ -1,9 +1,11 @@
 import * as React from 'react';
 import { useState } from 'react';
+import { useNavigate } from "react-router-dom";
 import { TextField, Button } from '@mui/material';
 import { Box } from '@mui/system';
 import GoogleIcon from '@mui/icons-material/Google';
 const Signup = () => {
+    const navigate = useNavigate();
     const [user, setUser] = useState({
         name: "",
         email: "",
@@ -32,14 +34,14 @@ const Signup = () => {
             })
         });
         const data = await res.json();
-        console.log(data);
-        if(data.status === 422 || !data)
+        if(res.status === 422 || !data)
         {
             window.alert("Invalid Registration");
         }
         else
         {
             window.alert("Registered Successfully")
+            navigate('/login');
         }
     }
     return (

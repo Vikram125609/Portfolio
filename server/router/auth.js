@@ -13,9 +13,9 @@ router.post('/register', async (req, res) => {
         if (userExist) {
             return res.status(422).json({ success: false, message: "User Already Exist" });
         }
-        // else if (password != cpassword) {
-        //     return res.status(400).json({ success: false, message: "Password are not matching" });
-        // }
+        else if (password[0] != cpassword[0]) {
+            return res.status(400).json({ success: false, message: "Password are not matching" });
+        }
         else {
             const user = new User({ name:name[0], email:email[0], phone:phone[0], work:work[0], password:password[0], cpassword:cpassword[0] });
             await user.save()
@@ -34,7 +34,7 @@ router.post('/signin', async (req, res) => {
         }
         const userExist = await User.findOne({ email: email });
         console.log(userExist);
-        if (userExist) {
+        if (userExist != null) {
             const isSame = await bcrypt.compare(password, userExist.password);
             if (isSame) {
                 token = await userExist.generateAuthToken();
