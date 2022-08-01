@@ -1,6 +1,7 @@
 const express = require('express');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const authenticate = require('../middleware/authenticate');
 const router = express.Router();
 const User = require('../models/userSchema');
 router.get('/', (req, res) => {
@@ -17,7 +18,7 @@ router.post('/register', async (req, res) => {
             return res.status(400).json({ success: false, message: "Password are not matching" });
         }
         else {
-            const user = new User({ name:name[0], email:email[0], phone:phone[0], work:work[0], password:password[0], cpassword:cpassword[0] });
+            const user = new User({ name: name[0], email: email[0], phone: phone[0], work: work[0], password: password[0], cpassword: cpassword[0] });
             await user.save()
             return res.status(201).json({ success: true, message: user });
         }
@@ -57,4 +58,7 @@ router.post('/signin', async (req, res) => {
         return res.status(500).json({ success: false, message: error });
     }
 });
+router.get('/about', authenticate, (req, res) => {
+    res.send(req.rootUser);
+})
 module.exports = router;
